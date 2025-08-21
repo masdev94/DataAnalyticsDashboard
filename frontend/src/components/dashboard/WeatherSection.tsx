@@ -1,22 +1,39 @@
 import { useState } from 'react';
 import { Card } from '../ui/Card';
-import { useWeatherData } from '../../hooks/useDashboardData';
+import { useWeatherSection } from '../../hooks/useSectionHooks';
 import { 
-  formatTemperature, 
   formatPressure, 
-  formatWindSpeed, 
   formatHumidity,
   formatTimestamp 
 } from '../../utils/formatters';
+import { 
+  FaCloudSun, 
+  FaSearch, 
+  FaTimes, 
+  FaExclamationTriangle, 
+  FaSpinner, 
+  FaInfoCircle,
+  FaSun,
+  FaCloud,
+  FaCloudRain,
+  FaSnowflake,
+  FaSmog,
+  FaBolt,
+  FaThermometerHalf,
+  FaThermometerEmpty,
+  FaTint,
+  FaCompressAlt,
+  FaWind,
+  FaClock
+} from 'react-icons/fa';
 
 export function WeatherSection() {
   const [cityInput, setCityInput] = useState('');
-  const { data, loading, error, fetch, clear } = useWeatherData();
+  const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
+  const { data, loading, error, search, clear, hasData } = useWeatherSection();
 
   const handleSearch = () => {
-    if (cityInput.trim()) {
-      fetch(cityInput);
-    }
+    search(cityInput);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -30,9 +47,40 @@ export function WeatherSection() {
     clear();
   };
 
+  const toggleUnits = () => {
+    setUnits(prev => prev === 'metric' ? 'imperial' : 'metric');
+  };
+
+  const getWeatherIcon = (description: string) => {
+    const desc = description.toLowerCase();
+    if (desc.includes('clear') || desc.includes('sunny')) return <FaSun />;
+    if (desc.includes('cloudy') || desc.includes('overcast')) return <FaCloud />;
+    if (desc.includes('rain') || desc.includes('drizzle')) return <FaCloudRain />;
+    if (desc.includes('snow')) return <FaSnowflake />;
+    if (desc.includes('fog') || desc.includes('mist')) return <FaSmog />;
+    if (desc.includes('thunder')) return <FaBolt />;
+    return <FaCloudSun />;
+  };
+
+  const getTemperatureDisplay = (temp: number) => {
+    if (units === 'imperial') {
+      const fahrenheit = (temp * 9/5) + 32;
+      return `${Math.round(fahrenheit)}°F`;
+    }
+    return `${temp}°C`;
+  };
+
+  const getWindSpeedDisplay = (speed: number) => {
+    if (units === 'imperial') {
+      const mph = speed * 2.237;
+      return `${Math.round(mph)} mph`;
+    }
+    return `${speed} m/s`;
+  };
+
   return (
-    <Card title="Weather Information" icon="fas fa-cloud-sun">
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
+    <Card title="Weather Information" icon={<FaCloudSun />}>
+      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         <input
           type="text"
           value={cityInput}
@@ -41,6 +89,7 @@ export function WeatherSection() {
           placeholder="Enter city name..."
           style={{
             flex: 1,
+            minWidth: '200px',
             padding: '0.75rem 1rem',
             border: '2px solid #e5e7eb',
             borderRadius: '0.5rem',
@@ -55,64 +104,207 @@ export function WeatherSection() {
           className="btn-primary"
           disabled={loading}
         >
-          <i className="fas fa-search"></i>
+          <FaSearch />
           {loading ? ' Loading...' : ' Search'}
         </button>
-        {data && (
+        {hasData && (
           <button onClick={handleClear} className="btn-secondary">
-            <i className="fas fa-times"></i> Clear
+            <FaTimes /> Clear
           </button>
         )}
+        <button 
+          onClick={toggleUnits} 
+          className="btn-secondary"
+          style={{ minWidth: '80px' }}
+        >
+          {units === 'metric' ? '°C' : '°F'}
+        </button>
       </div>
 
       <div style={{ minHeight: '200px' }}>
-        {error && <div className="error">Error: {error}</div>}
-        
-        {!data && !error && !loading && (
-          <p style={{ textAlign: 'center', color: '#6b7280', fontStyle: 'italic', padding: '2rem 0' }}>
-            Enter a city to see weather information
-          </p>
+        {error && (
+          <div className="error">
+            <FaExclamationTriangle style={{ marginRight: '0.5rem' }} />
+            Error: {error}
+          </div>
         )}
         
-        {loading && <div className="loading">Loading weather data...</div>}
-        
-        {data && (
+        {!hasData && !error && !loading && (
           <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '1rem' 
+            textAlign: 'center', 
+            color: '#6b7280', 
+            fontStyle: 'italic', 
+            padding: '2rem 0',
+            backgroundColor: '#f9fafb',
+            borderRadius: '0.5rem',
+            border: '2px dashed #d1d5db'
           }}>
-            <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Location</div>
-              <div style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937' }}>{data.city}, {data.country}</div>
+            <FaSearch style={{ fontSize: '2rem', marginBottom: '1rem', display: 'block', color: '#9ca3af' }} />
+            <p>Enter a city name to see current weather information</p>
+            <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>Powered by Open-Meteo API</p>
+          </div>
+        )}
+        
+        {loading && (
+          <div className="loading">
+            <FaSpinner style={{ marginRight: '0.5rem' }} />
+            Loading weather data...
+          </div>
+        )}
+        
+        {hasData && data && (
+          <div>
+            {/* City Header */}
+            <div style={{ 
+              textAlign: 'center', 
+              marginBottom: '1.5rem',
+              padding: '1rem',
+              backgroundColor: '#f0f9ff',
+              borderRadius: '0.75rem',
+              border: '1px solid #bae6fd'
+            }}>
+              <h3 style={{ 
+                fontSize: '1.5rem', 
+                fontWeight: '600', 
+                color: '#0369a1',
+                marginBottom: '0.5rem'
+              }}>
+                {getWeatherIcon(data.weatherStats.description)} {data.cityInfo.name}, {data.cityInfo.country}
+              </h3>
+              <p style={{ 
+                fontSize: '1.125rem', 
+                color: '#0c4a6e',
+                marginBottom: '0.25rem'
+              }}>
+                {data.weatherStats.description}
+              </p>
+              <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                Timezone: {data.cityInfo.timezone} • Last updated: {formatTimestamp(data.cityInfo.lastUpdated)}
+              </p>
             </div>
-            <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Temperature</div>
-              <div style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937' }}>{formatTemperature(data.temperature)}</div>
+
+            {/* Main Weather Grid */}
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
+              gap: '1rem',
+              marginBottom: '1.5rem'
+            }}>
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '1.5rem 1rem', 
+                backgroundColor: 'white', 
+                borderRadius: '0.75rem', 
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }}>
+                <div style={{ fontSize: '2rem', color: '#dc2626', marginBottom: '0.5rem' }}>
+                  <FaThermometerHalf />
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Temperature</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+                  {data.formatted.temperature}
+                </div>
+              </div>
+
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '1.5rem 1rem', 
+                backgroundColor: 'white', 
+                borderRadius: '0.75rem', 
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }}>
+                <div style={{ fontSize: '2rem', color: '#f59e0b', marginBottom: '0.5rem' }}>
+                  <FaThermometerEmpty />
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Feels Like</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+                  {data.formatted.feelsLike}
+                </div>
+              </div>
+
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '1.5rem 1rem', 
+                backgroundColor: 'white', 
+                borderRadius: '0.75rem', 
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }}>
+                <div style={{ fontSize: '2rem', color: '#3b82f6', marginBottom: '0.5rem' }}>
+                  <FaTint />
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Humidity</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+                  {data.formatted.humidity}
+                </div>
+              </div>
+
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '1.5rem 1rem', 
+                backgroundColor: 'white', 
+                borderRadius: '0.75rem', 
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }}>
+                <div style={{ fontSize: '2rem', color: '#8b5cf6', marginBottom: '0.5rem' }}>
+                  <FaCompressAlt />
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Pressure</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+                  {data.formatted.pressure}
+                </div>
+              </div>
+
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '1.5rem 1rem', 
+                backgroundColor: 'white', 
+                borderRadius: '0.75rem', 
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }}>
+                <div style={{ fontSize: '2rem', color: '#10b981', marginBottom: '0.5rem' }}>
+                  <FaWind />
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Wind Speed</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+                  {data.formatted.windSpeed}
+                </div>
+              </div>
+
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '1.5rem 1rem', 
+                backgroundColor: 'white', 
+                borderRadius: '0.75rem', 
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }}>
+                <div style={{ fontSize: '2rem', color: '#6b7280', marginBottom: '0.5rem' }}>
+                  <FaClock />
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Updated</div>
+                <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937' }}>
+                  {formatTimestamp(data.cityInfo.lastUpdated)}
+                </div>
+              </div>
             </div>
-            <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Feels Like</div>
-              <div style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937' }}>{formatTemperature(data.feelsLike)}</div>
-            </div>
-            <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Humidity</div>
-              <div style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937' }}>{formatHumidity(data.humidity)}</div>
-            </div>
-            <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Pressure</div>
-              <div style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937' }}>{formatPressure(data.pressure)}</div>
-            </div>
-            <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Wind Speed</div>
-              <div style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937' }}>{formatWindSpeed(data.windSpeed)}</div>
-            </div>
-            <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Description</div>
-              <div style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937', textTransform: 'capitalize' }}>{data.description}</div>
-            </div>
-            <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Last Updated</div>
-              <div style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937' }}>{formatTimestamp(data.timestamp)}</div>
+
+            {/* API Info Footer */}
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '0.75rem', 
+              backgroundColor: '#f0fdf4', 
+              borderRadius: '0.5rem',
+              border: '1px solid #bbf7d0',
+              fontSize: '0.875rem',
+              color: '#166534'
+            }}>
+              <FaInfoCircle style={{ marginRight: '0.5rem' }} />
+              Weather data provided by Open-Meteo API • Units: {units.toUpperCase()} • Timezone: {data.cityInfo.timezone}
             </div>
           </div>
         )}

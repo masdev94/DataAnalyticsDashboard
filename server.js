@@ -82,24 +82,32 @@ app.get('/api/github', async (req, res) => {
     }
 });
 
-// Fetch weather data from free weather API
+// Fetch weather data from Open-Meteo API (completely free, no API key required)
 app.get('/api/weather/:city', async (req, res) => {
     try {
         const { city } = req.params;
         console.log(`Weather request for city: ${city}`);
         
-        // Use a completely free weather API that doesn't require any subscription
-        // This API provides real weather data without any cost or API key requirements
+        // Get API configuration from environment variables
+        const baseUrl = process.env.WEATHER_API_BASE_URL || 'https://api.open-meteo.com/v1';
+        const endpoint = process.env.WEATHER_API_ENDPOINT || '/forecast';
+        const units = process.env.WEATHER_DEFAULT_UNITS || 'metric';
+        const timezone = process.env.WEATHER_TIMEZONE || 'auto';
+        
+        // Build the Open-Meteo API URL with proper parameters
+        const weatherApiUrl = `${baseUrl}${endpoint}?name=${encodeURIComponent(city)}&current=temperature_2m,relative_humidity_2m,apparent_temperature,pressure_msl,wind_speed_10m,weather_code&units=${units}&timezone=${timezone}`;
+        
+        console.log(`Calling Open-Meteo API: ${weatherApiUrl}`);
         
         try {
-            // Try to get real weather data from a free API
-            const response = await axios.get(`https://api.open-meteo.com/v1/forecast?name=${encodeURIComponent(city)}&current=temperature_2m,relative_humidity_2m,apparent_temperature,pressure_msl,wind_speed_10m,weather_code&timezone=auto`);
+            // Call the Open-Meteo API
+            const response = await axios.get(weatherApiUrl);
             
             if (response.data && response.data.current) {
                 const weatherData = response.data;
                 const current = weatherData.current;
                 
-                // Map weather codes to descriptions
+                // Map Open-Meteo weather codes to human-readable descriptions
                 const weatherDescriptions = {
                     0: 'Clear sky',
                     1: 'Mainly clear',
@@ -119,27 +127,54 @@ app.get('/api/weather/:city', async (req, res) => {
                     95: 'Thunderstorm'
                 };
                 
+                // Process and format the weather data
                 const processedWeather = {
                     city: city,
-                    country: 'Unknown', // This free API doesn't provide country info
+                    country: weatherData.location?.country || 'Unknown',
                     temperature: Math.round(current.temperature_2m),
                     feelsLike: Math.round(current.apparent_temperature),
                     humidity: Math.round(current.relative_humidity_2m),
                     pressure: Math.round(current.pressure_msl),
                     description: weatherDescriptions[current.weather_code] || 'Unknown',
                     windSpeed: Math.round(current.wind_speed_10m),
-                    timestamp: new Date().toISOString()
+                    timestamp: new Date().toISOString(),
+                    units: units,
+                    timezone: weatherData.timezone || 'Unknown'
                 };
                 
-                console.log('Real weather data fetched successfully:', processedWeather);
+                console.log('Open-Meteo weather data fetched successfully:', processedWeather);
                 res.json(processedWeather);
                 return;
+            } else {
+                throw new Error('Invalid response format from Open-Meteo API');
             }
-        } catch (freeApiError) {
-            console.log('Free weather API failed, falling back to mock data:', freeApiError.message);
+            
+        } catch (apiError) {
+            console.log('Open-Meteo API error:', apiError.message);
+            
+            // Check for specific error types
+            if (apiError.response) {
+                if (apiError.response.status === 400) {
+                    return res.status(400).json({
+                        error: 'Invalid city name',
+                        message: 'Please check the city name and try again'
+                    });
+                } else if (apiError.response.status === 404) {
+                    return res.status(404).json({
+                        error: 'City not found',
+                        message: 'The specified city could not be found'
+                    });
+                }
+            }
+            
+            // Fall through to mock data
+            throw apiError;
         }
         
-        // Fallback to mock data if free API fails
+    } catch (error) {
+        console.error('Error in weather endpoint:', error.message);
+        
+        // Fallback to mock data if API fails
         console.log('Using mock weather data as fallback');
         const mockWeatherData = {
             city: city,
@@ -150,18 +185,13 @@ app.get('/api/weather/:city', async (req, res) => {
             pressure: Math.round(Math.random() * 200) + 1000,
             description: ['Sunny', 'Cloudy', 'Rainy', 'Partly Cloudy', 'Clear'][Math.floor(Math.random() * 5)],
             windSpeed: Math.round(Math.random() * 20) + 5,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            units: 'metric',
+            timezone: 'UTC'
         };
         
         console.log('Mock weather data generated:', mockWeatherData);
         res.json(mockWeatherData);
-        
-    } catch (error) {
-        console.error('Error in weather endpoint:', error.message);
-        res.status(500).json({ 
-            error: 'Failed to fetch weather data',
-            message: error.message 
-        });
     }
 });
 

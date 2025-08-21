@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
+import { FaSyncAlt } from 'react-icons/fa';
 
 interface CardProps {
   title: string;
-  icon?: string;
+  icon?: string | ReactNode;
   children: ReactNode;
   className?: string;
   onRefresh?: () => void;
@@ -10,11 +11,18 @@ interface CardProps {
 }
 
 export function Card({ title, icon, children, className = '', onRefresh, loading }: CardProps) {
+  const renderIcon = () => {
+    if (typeof icon === 'string') {
+      return <i className={icon}></i>;
+    }
+    return icon;
+  };
+
   return (
     <div className={`card ${className}`}>
       <div className="card-header">
         <h2 style={{ fontSize: '1.25rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          {icon && <i className={icon}></i>}
+          {icon && renderIcon()}
           {title}
         </h2>
         {onRefresh && (
@@ -23,7 +31,7 @@ export function Card({ title, icon, children, className = '', onRefresh, loading
             onClick={onRefresh}
             disabled={loading}
           >
-            <i className="fas fa-sync-alt"></i>
+            <FaSyncAlt className={loading ? 'fa-spin' : ''} />
             {loading ? ' Loading...' : ' Refresh'}
           </button>
         )}

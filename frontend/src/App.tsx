@@ -1,7 +1,8 @@
-import { DashboardProvider } from './context/DashboardContext';
-import { CryptocurrencySection } from './components/dashboard/CryptocurrencySection';
-import { GitHubSection } from './components/dashboard/GitHubSection';
-import { WeatherSection } from './components/dashboard/WeatherSection';
+import { DashboardProvider } from './context/DashboardContext.js';
+import { CryptocurrencySection } from './components/dashboard/CryptocurrencySection.js';
+import { GitHubSection } from './components/dashboard/GitHubSection.js';
+import { WeatherSection } from './components/dashboard/WeatherSection.js';
+import { FaChartLine } from 'react-icons/fa';
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
               marginBottom: '0.75rem',
               textShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
             }}>
-              <i className="fas fa-chart-line" style={{ marginRight: '0.75rem' }}></i>
+              <FaChartLine style={{ marginRight: '0.75rem' }} />
               Data Analytics Dashboard
             </h1>
             <p style={{ 

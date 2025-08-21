@@ -61,7 +61,7 @@ This application is a **comprehensive data analytics dashboard** that:
 - **⚡ Vite** - Lightning-fast build tool and dev server with HMR
 - **🔷 TypeScript** - Full type safety and better developer experience
 - **🎨 TailwindCSS** - Utility-first CSS framework with custom design system
-- **🔄 React 18+** - Latest React features with hooks and concurrent rendering
+- **🔄 React 19** - Latest React features with hooks and concurrent rendering
 - **📊 Context API + useReducer** - Modern state management patterns
 - **🧩 Component-driven architecture** with reusable UI components
 - **📱 Mobile-first responsive design** with CSS Grid and Flexbox
@@ -83,7 +83,7 @@ This application is a **comprehensive data analytics dashboard** that:
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/masdev94/DataAnalyticsDashboard.git
    cd product-developer-task
    ```
 

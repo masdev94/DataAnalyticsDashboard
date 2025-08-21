@@ -159,7 +159,7 @@ export interface GitHubData {
   averageStars: number;
 }
 
-// Weather Types
+// Weather Data Types
 export interface WeatherData {
   city: string;
   country: string;
@@ -170,6 +170,8 @@ export interface WeatherData {
   description: string;
   windSpeed: number;
   timestamp: string;
+  units: string;
+  timezone: string;
 }
 
 // API Response Types
