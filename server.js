@@ -177,7 +177,7 @@ app.get('/api/weather/:city', async (req, res) => {
         // Fallback to mock data if API fails
         console.log('Using mock weather data as fallback');
         const mockWeatherData = {
-            city: city,
+            city: req.params.city, // Fix: Use req.params.city instead of undefined city
             country: 'Demo',
             temperature: Math.round(Math.random() * 30) + 10,
             feelsLike: Math.round(Math.random() * 30) + 10,

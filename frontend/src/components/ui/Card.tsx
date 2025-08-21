@@ -8,9 +8,10 @@ interface CardProps {
   className?: string;
   onRefresh?: () => void;
   loading?: boolean;
+  showRefresh?: boolean;
 }
 
-export function Card({ title, icon, children, className = '', onRefresh, loading }: CardProps) {
+export function Card({ title, icon, children, className = '', onRefresh, loading, showRefresh = true }: CardProps) {
   const renderIcon = () => {
     if (typeof icon === 'string') {
       return <i className={icon}></i>;
@@ -25,7 +26,7 @@ export function Card({ title, icon, children, className = '', onRefresh, loading
           {icon && renderIcon()}
           {title}
         </h2>
-        {onRefresh && (
+        {onRefresh && showRefresh && (
           <button 
             className="btn-primary"
             onClick={onRefresh}

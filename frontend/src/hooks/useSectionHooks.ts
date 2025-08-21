@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { useCryptoData, useGitHubData, useWeatherData } from './useDashboardData';
 import { formatCurrency, formatPercentage, formatNumber } from '../utils/formatters';
 
@@ -140,6 +140,42 @@ export function useGitHubSection() {
 // Enhanced Weather Section Hook
 export function useWeatherSection() {
   const { data, loading, error, fetch, clear } = useWeatherData();
+  const [userLocation, setUserLocation] = useState<string | null>(null);
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+
+  // Detect user's IP location on component mount
+  useEffect(() => {
+    const detectUserLocation = async () => {
+      setIsDetectingLocation(true);
+      try {
+        // Use a free IP geolocation service
+        const response = await globalThis.fetch('https://ipapi.co/json/');
+        if (!response.ok) {
+          throw new Error('Failed to fetch location data');
+        }
+        const locationData = await response.json();
+        
+        if (locationData.city && locationData.country_name) {
+          const location = `${locationData.city}, ${locationData.country_name}`;
+          setUserLocation(location);
+          // Automatically fetch weather for user's location
+          fetch(locationData.city);
+        }
+      } catch (error) {
+        console.log('Could not detect user location:', error);
+        // Fallback to a default city
+        setUserLocation('London, United Kingdom');
+        fetch('London');
+      } finally {
+        setIsDetectingLocation(false);
+      }
+    };
+
+    // Only detect location if no weather data exists
+    if (!data && !loading) {
+      detectUserLocation();
+    }
+  }, []); // Remove dependencies to avoid infinite loops
 
   const processedData = useMemo(() => {
     if (!data) return null;
@@ -147,30 +183,30 @@ export function useWeatherSection() {
     return {
       // City Info
       cityInfo: {
-        name: data.city,
-        country: data.country,
-        timezone: data.timezone,
-        lastUpdated: data.timestamp
+        name: data.city || 'Unknown',
+        country: data.country || 'Unknown',
+        timezone: data.timezone || 'Unknown',
+        lastUpdated: data.timestamp || new Date().toISOString()
       },
       
       // Weather Stats
       weatherStats: {
-        temperature: data.temperature,
-        feelsLike: data.feelsLike,
-        humidity: data.humidity,
-        pressure: data.pressure,
-        windSpeed: data.windSpeed,
-        description: data.description,
-        units: data.units
+        temperature: data.temperature || 0,
+        feelsLike: data.feelsLike || 0,
+        humidity: data.humidity || 0,
+        pressure: data.pressure || 0,
+        windSpeed: data.windSpeed || 0,
+        description: data.description || 'Unknown',
+        units: data.units || 'metric'
       },
       
       // Formatted Values
       formatted: {
-        temperature: `${data.temperature}°${data.units === 'metric' ? 'C' : 'F'}`,
-        feelsLike: `${data.feelsLike}°${data.units === 'metric' ? 'C' : 'F'}`,
-        humidity: `${data.humidity}%`,
-        pressure: `${data.pressure} hPa`,
-        windSpeed: `${data.windSpeed} ${data.units === 'metric' ? 'm/s' : 'mph'}`
+        temperature: `${data.temperature || 0}°${(data.units || 'metric') === 'metric' ? 'C' : 'F'}`,
+        feelsLike: `${data.feelsLike || 0}°${(data.units || 'metric') === 'metric' ? 'C' : 'F'}`,
+        humidity: `${data.humidity || 0}%`,
+        pressure: `${data.pressure || 0} hPa`,
+        windSpeed: `${data.windSpeed || 0} ${(data.units || 'metric') === 'metric' ? 'm/s' : 'mph'}`
       }
     };
   }, [data]);
@@ -185,12 +221,22 @@ export function useWeatherSection() {
     clear();
   };
 
+  const refreshCurrentLocation = () => {
+    if (userLocation) {
+      const city = userLocation.split(',')[0].trim();
+      fetch(city);
+    }
+  };
+
   return {
     data: processedData,
-    loading,
+    loading: loading || isDetectingLocation,
     error,
     search: searchWeather,
     clear: clearWeather,
-    hasData: !!data
+    refresh: refreshCurrentLocation,
+    hasData: !!data,
+    userLocation,
+    isDetectingLocation
   };
 }

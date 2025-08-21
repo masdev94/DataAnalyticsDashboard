@@ -24,13 +24,25 @@ import {
   FaTint,
   FaCompressAlt,
   FaWind,
-  FaClock
+  FaClock,
+  FaMapMarkerAlt,
+  FaSyncAlt
 } from 'react-icons/fa';
 
 export function WeatherSection() {
   const [cityInput, setCityInput] = useState('');
   const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
-  const { data, loading, error, search, clear, hasData } = useWeatherSection();
+  const { 
+    data, 
+    loading, 
+    error, 
+    search, 
+    clear, 
+    refresh, 
+    hasData, 
+    userLocation, 
+    isDetectingLocation 
+  } = useWeatherSection();
 
   const handleSearch = () => {
     search(cityInput);
@@ -79,14 +91,69 @@ export function WeatherSection() {
   };
 
   return (
-    <Card title="Weather Information" icon={<FaCloudSun />}>
+    <Card 
+      title="Weather Information" 
+      icon={<FaCloudSun />} 
+      onRefresh={refresh}
+      loading={loading}
+      showRefresh={hasData}
+    >
+      {/* Location Detection Status */}
+      {isDetectingLocation && (
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '1rem', 
+          backgroundColor: '#f0f9ff', 
+          borderRadius: '0.5rem',
+          border: '1px solid #bae6fd',
+          marginBottom: '1rem',
+          fontSize: '0.875rem',
+          color: '#0369a1'
+        }}>
+          <FaSpinner className="fa-spin" style={{ marginRight: '0.5rem' }} />
+          Detecting your location...
+        </div>
+      )}
+
+      {/* User Location Display */}
+      {userLocation && !isDetectingLocation && (
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '0.5rem',
+          padding: '0.75rem', 
+          backgroundColor: '#f0fdf4', 
+          borderRadius: '0.5rem',
+          border: '1px solid #bbf7d0',
+          marginBottom: '1rem',
+          fontSize: '0.875rem',
+          color: '#166534'
+        }}>
+          <FaMapMarkerAlt />
+          <span>Your location: <strong>{userLocation}</strong></span>
+          <button 
+            onClick={refresh}
+            className="btn-secondary"
+            style={{ 
+              marginLeft: 'auto', 
+              padding: '0.25rem 0.5rem',
+              fontSize: '0.75rem'
+            }}
+            title="Refresh weather for your location"
+          >
+            <FaSyncAlt />
+          </button>
+        </div>
+      )}
+
+      {/* Search Controls */}
       <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         <input
           type="text"
           value={cityInput}
           onChange={(e) => setCityInput(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Enter city name..."
+          placeholder="Search for a city..."
           style={{
             flex: 1,
             minWidth: '200px',
@@ -129,7 +196,7 @@ export function WeatherSection() {
           </div>
         )}
         
-        {!hasData && !error && !loading && (
+        {!hasData && !error && !loading && !isDetectingLocation && (
           <div style={{ 
             textAlign: 'center', 
             color: '#6b7280', 
@@ -140,12 +207,13 @@ export function WeatherSection() {
             border: '2px dashed #d1d5db'
           }}>
             <FaSearch style={{ fontSize: '2rem', marginBottom: '1rem', display: 'block', color: '#9ca3af' }} />
-            <p>Enter a city name to see current weather information</p>
-            <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>Powered by Open-Meteo API</p>
+            <p>Weather information will be automatically loaded for your location</p>
+            <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>Or search for any city above</p>
+            <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: '#9ca3af' }}>Powered by Open-Meteo API</p>
           </div>
         )}
         
-        {loading && (
+        {loading && !isDetectingLocation && (
           <div className="loading">
             <FaSpinner style={{ marginRight: '0.5rem' }} />
             Loading weather data...
