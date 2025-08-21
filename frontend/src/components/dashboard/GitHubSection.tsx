@@ -1,14 +1,13 @@
 import { useState, useMemo } from 'react';
 import { Card } from '../ui/Card';
 import { StatsGrid } from '../ui/StatsGrid';
-import { useGitHubSection } from '../../hooks/useSectionHooks';
+import { useGitHubSection } from '../../hooks/useDashboardData';
 import { 
   FaGithub, 
   FaList, 
   FaChartBar, 
   FaStar, 
   FaCodeBranch, 
-  FaEye, 
   FaChartPie, 
   FaChevronLeft, 
   FaChevronRight,
@@ -26,15 +25,15 @@ export function GitHubSection() {
   const [activeTab, setActiveTab] = useState<'repos' | 'charts'>('repos');
 
   const totalPages = useMemo(() => {
-    if (!data?.repositories) return 0;
-    return Math.ceil(data.repositories.length / ITEMS_PER_PAGE);
-  }, [data?.repositories]);
+    if (!data?.starsData) return 0;
+    return Math.ceil(data.starsData.length / ITEMS_PER_PAGE);
+  }, [data?.starsData]);
 
   const paginatedRepos = useMemo(() => {
-    if (!data?.repositories) return [];
+    if (!data?.starsData) return [];
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return data.repositories.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [data?.repositories, currentPage]);
+    return data.starsData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [data?.starsData, currentPage]);
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#FF6B6B'];
 
@@ -150,8 +149,8 @@ export function GitHubSection() {
                   Top Trending Repositories
                 </h3>
                 <div className="space-y-4">
-                  {paginatedRepos.map((repo, index) => (
-                    <div key={repo.id} style={{ 
+                                     {paginatedRepos.map((repo, index) => (
+                     <div key={`repo-${index}`} style={{ 
                       backgroundColor: 'white',
                       padding: '1rem',
                       borderRadius: '0.5rem',
@@ -180,64 +179,35 @@ export function GitHubSection() {
                             gap: '0.5rem',
                             marginBottom: '0.25rem'
                           }}>
-                            <a 
-                              href={repo.html_url} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              style={{ 
-                                fontWeight: '600', 
-                                color: '#1f2937',
-                                textDecoration: 'none'
-                              }}
-                              onMouseEnter={(e) => e.currentTarget.style.color = '#3b82f6'}
-                              onMouseLeave={(e) => e.currentTarget.style.color = '#1f2937'}
-                            >
-                              {repo.full_name}
-                            </a>
-                            {repo.language && (
-                              <span style={{ 
-                                fontSize: '0.75rem',
-                                padding: '0.25rem 0.5rem',
-                                backgroundColor: '#e0e7ff',
-                                color: '#3730a3',
-                                borderRadius: '0.25rem',
-                                fontWeight: '500'
-                              }}>
-                                {repo.language}
-                              </span>
-                            )}
-                          </div>
-                          {repo.description && (
-                            <p style={{ 
-                              fontSize: '0.875rem', 
-                              color: '#6b7280',
-                              marginBottom: '0.5rem',
-                              lineHeight: '1.4'
-                            }}>
-                              {repo.description.length > 100 
-                                ? `${repo.description.substring(0, 100)}...` 
-                                : repo.description
-                              }
-                            </p>
-                          )}
-                          <div style={{ 
-                            display: 'flex', 
-                            gap: '1rem', 
-                            fontSize: '0.875rem',
-                            color: '#6b7280'
-                          }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                              <FaStar style={{ color: '#f59e0b' }} />
-                              {repo.stargazers_count}
-                            </span>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                              <FaCodeBranch style={{ color: '#10b981' }} />
-                              {repo.forks_count}
-                            </span>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                              <FaEye style={{ color: '#3b82f6' }} />
-                              {repo.watchers_count}
-                            </span>
+                                                         <a 
+                               href={`https://github.com/${repo.fullName}`}
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               style={{ 
+                                 fontWeight: '600', 
+                                 color: '#1f2937',
+                                 textDecoration: 'none'
+                               }}
+                               onMouseEnter={(e) => e.currentTarget.style.color = '#3b82f6'}
+                               onMouseLeave={(e) => e.currentTarget.style.color = '#1f2937'}
+                             >
+                               {repo.fullName}
+                             </a>
+                           </div>
+                           <div style={{ 
+                             display: 'flex', 
+                             gap: '1rem', 
+                             fontSize: '0.875rem',
+                             color: '#6b7280'
+                           }}>
+                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                               <FaStar style={{ color: '#f59e0b' }} />
+                               {repo.stars}
+                             </span>
+                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                               <FaCodeBranch style={{ color: '#10b981' }} />
+                               {repo.forks}
+                             </span>
                           </div>
                         </div>
                       </div>
@@ -346,18 +316,18 @@ export function GitHubSection() {
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
-                        data={data.chartData.languages}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ language, percentage }) => `${language} (${percentage}%)`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="count"
-                      >
-                        {data.chartData.languages.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
+                                                 data={data.chartData}
+                         cx="50%"
+                         cy="50%"
+                         labelLine={false}
+                         label={({ name, percentage }) => `${name} (${percentage}%)`}
+                         outerRadius={80}
+                         fill="#8884d8"
+                         dataKey="value"
+                       >
+                         {data.chartData.map((entry, index) => (
+                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                         ))}
                       </Pie>
                       <Tooltip formatter={(value, name) => [value, 'Repositories']} />
                     </PieChart>
@@ -386,10 +356,10 @@ export function GitHubSection() {
                 </h3>
                 <div style={{ height: '400px' }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={data.chartData.starsVsForks}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                    >
+                                         <BarChart
+                       data={data.starsData}
+                       margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                     >
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis />
@@ -415,7 +385,7 @@ export function GitHubSection() {
             color: '#166534'
           }}>
             <FaInfoCircle style={{ marginRight: '0.5rem' }} />
-            Data provided by GitHub API • Trending repositories from 2024 • Total repos: {data.totalRepos}
+                         Data provided by GitHub API • Trending repositories from 2024 • Total repos: {data.overview.totalRepos}
           </div>
         </div>
       )}

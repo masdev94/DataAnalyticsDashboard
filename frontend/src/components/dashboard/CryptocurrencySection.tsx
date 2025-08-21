@@ -1,6 +1,7 @@
+import { useCryptoSection } from '../../hooks/useDashboardData';
 import { Card } from '../ui/Card';
 import { StatsGrid } from '../ui/StatsGrid';
-import { useCryptoSection } from '../../hooks/useSectionHooks';
+import { formatCurrency } from '../../utils/formatters';
 import { 
   FaBitcoin, 
   FaExclamationTriangle, 
@@ -56,7 +57,7 @@ export function CryptocurrencySection() {
               },
               {
                 label: 'Top Gainers',
-                value: data.marketOverview.topGainersCount,
+                value: data.topGainers.length,
                 className: 'bg-yellow-50'
               }
             ]}
@@ -105,7 +106,7 @@ export function CryptocurrencySection() {
                         {coin.name} ({coin.symbol})
                       </div>
                       <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                        {coin.price}
+                        {formatCurrency(coin.current_price)}
                       </div>
                     </div>
                     <div style={{ 
@@ -113,7 +114,7 @@ export function CryptocurrencySection() {
                       fontWeight: '600',
                       fontSize: '1.125rem'
                     }}>
-                      +{coin.changeFormatted.text}
+                      +{coin.change.text}
                     </div>
                   </div>
                 ))}
@@ -154,16 +155,16 @@ export function CryptocurrencySection() {
                       <div style={{ fontWeight: '600', color: '#1f2937' }}>
                         {coin.name} ({coin.symbol})
                       </div>
-                      <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                        {coin.price}
+                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                            {formatCurrency(coin.current_price)}
+                        </div>
                       </div>
-                    </div>
-                    <div style={{ 
-                      color: '#dc2626', 
-                      fontWeight: '600',
-                      fontSize: '1.125rem'
-                    }}>
-                      {coin.changeFormatted.text}
+                      <div style={{ 
+                        color: '#dc2626', 
+                        fontWeight: '600',
+                        fontSize: '1.125rem'
+                      }}>
+                        {coin.change.text}
                     </div>
                   </div>
                 ))}
@@ -221,7 +222,7 @@ export function CryptocurrencySection() {
                         {coin.name} ({coin.symbol})
                       </div>
                       <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                        {coin.price}
+                        {coin.priceFormatted}
                       </div>
                     </div>
                   </div>
@@ -230,7 +231,7 @@ export function CryptocurrencySection() {
                     fontWeight: '600',
                     fontSize: '1.125rem'
                   }}>
-                    {coin.marketCap}
+                    {coin.marketCapFormatted}
                   </div>
                 </div>
               ))}

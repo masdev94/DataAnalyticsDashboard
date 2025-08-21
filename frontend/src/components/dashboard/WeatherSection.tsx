@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import { Card } from '../ui/Card';
 import { AutocompleteSearch } from '../ui/AutocompleteSearch';
-import { useWeatherSection } from '../../hooks/useSectionHooks';
-import { 
-  formatPressure, 
-  formatHumidity,
-  formatTimestamp 
-} from '../../utils/formatters';
+import { useWeatherSection } from '../../hooks/useDashboardData';
+
 import { 
   FaCloudSun, 
   FaTimes, 
@@ -75,7 +71,7 @@ export function WeatherSection() {
       const mph = speed * 2.237;
       return `${Math.round(mph)} mph`;
     }
-    return `${speed} m/s`;
+    return `${speed} km/h`;
   };
 
   return (
@@ -217,9 +213,9 @@ export function WeatherSection() {
               }}>
                 {data.weatherStats.description}
               </p>
-              <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
-                Timezone: {data.cityInfo.timezone} • Last updated: {formatTimestamp(data.cityInfo.lastUpdated)}
-              </p>
+                             <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                 Local Timezone: {data.cityInfo.timezone} • Local Time: {data.cityInfo.localTime}
+               </p>
             </div>
 
             {/* Main Weather Grid */}
@@ -241,9 +237,9 @@ export function WeatherSection() {
                   <FaThermometerHalf />
                 </div>
                 <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Temperature</div>
-                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
-                  {data.formatted.temperature}
-                </div>
+                                 <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+                   {getTemperatureDisplay(data.weatherStats.temperature)}
+                 </div>
               </div>
 
               <div style={{ 
@@ -258,9 +254,9 @@ export function WeatherSection() {
                   <FaThermometerEmpty />
                 </div>
                 <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Feels Like</div>
-                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
-                  {data.formatted.feelsLike}
-                </div>
+                                 <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+                   {getTemperatureDisplay(data.weatherStats.feelsLike)}
+                 </div>
               </div>
 
               <div style={{ 
@@ -309,9 +305,9 @@ export function WeatherSection() {
                   <FaWind />
                 </div>
                 <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Wind Speed</div>
-                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
-                  {data.formatted.windSpeed}
-                </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+                   {getWindSpeedDisplay(data.weatherStats.windSpeed)}
+                 </div>
               </div>
 
               <div style={{ 
@@ -326,9 +322,9 @@ export function WeatherSection() {
                   <FaClock />
                 </div>
                 <div style={{ fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.25rem' }}>Updated</div>
-                <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937' }}>
-                  {formatTimestamp(data.cityInfo.lastUpdated)}
-                </div>
+                  <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937' }}>
+                   {data.cityInfo.localTime}
+                 </div>
               </div>
             </div>
 
@@ -343,7 +339,7 @@ export function WeatherSection() {
               color: '#166534'
             }}>
               <FaInfoCircle style={{ marginRight: '0.5rem' }} />
-              Weather data provided by Open-Meteo API • Units: {units.toUpperCase()} • Timezone: {data.cityInfo.timezone}
+                Weather data provided by Open-Meteo API • Units: {units.toUpperCase()} • Local Timezone: {data.cityInfo.timezone} • Local Time: {data.cityInfo.localTime}
             </div>
           </div>
         )}

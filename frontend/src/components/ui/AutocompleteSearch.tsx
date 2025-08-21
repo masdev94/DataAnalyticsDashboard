@@ -16,17 +16,52 @@ interface AutocompleteSearchProps {
 }
 
 // Popular cities database
-const POPULAR_CITIES: CitySuggestion[] = [
+const POPULAR_CITIES = [
+  { name: 'Belgrade', country: 'Serbia', displayName: 'Belgrade, Serbia' },
   { name: 'London', country: 'United Kingdom', displayName: 'London, United Kingdom' },
-  { name: 'New York', country: 'United States', state: 'New York', displayName: 'New York, New York, United States' },
+  { name: 'New York', country: 'United States', displayName: 'New York, United States' },
   { name: 'Paris', country: 'France', displayName: 'Paris, France' },
-  { name: 'Tokyo', country: 'Japan', displayName: 'Tokyo, Japan' },
   { name: 'Berlin', country: 'Germany', displayName: 'Berlin, Germany' },
-  { name: 'Moscow', country: 'Russia', displayName: 'Moscow, Russia' },
+  { name: 'Zagreb', country: 'Croatia', displayName: 'Zagreb, Croatia' },
+  { name: 'Budapest', country: 'Hungary', displayName: 'Budapest, Hungary' },
+  { name: 'Prague', country: 'Czech Republic', displayName: 'Prague, Czech Republic' },
+  { name: 'Warsaw', country: 'Poland', displayName: 'Warsaw, Poland' },
+  { name: 'Rome', country: 'Italy', displayName: 'Rome, Italy' },
+  { name: 'Madrid', country: 'Spain', displayName: 'Madrid, Spain' },
+  { name: 'Amsterdam', country: 'Netherlands', displayName: 'Amsterdam, Netherlands' },
+  { name: 'Brussels', country: 'Belgium', displayName: 'Brussels, Belgium' },
+  { name: 'Vienna', country: 'Austria', displayName: 'Vienna, Austria' },
+  { name: 'Stockholm', country: 'Sweden', displayName: 'Stockholm, Sweden' },
+  { name: 'Oslo', country: 'Norway', displayName: 'Oslo, Norway' },
+  { name: 'Copenhagen', country: 'Denmark', displayName: 'Copenhagen, Denmark' },
+  { name: 'Helsinki', country: 'Finland', displayName: 'Helsinki, Finland' },
+  { name: 'Dublin', country: 'Ireland', displayName: 'Dublin, Ireland' },
+  { name: 'Lisbon', country: 'Portugal', displayName: 'Lisbon, Portugal' },
+  { name: 'Athens', country: 'Greece', displayName: 'Athens, Greece' },
+  { name: 'Bucharest', country: 'Romania', displayName: 'Bucharest, Romania' },
+  { name: 'Sofia', country: 'Bulgaria', displayName: 'Sofia, Bulgaria' },
+  { name: 'Tallinn', country: 'Estonia', displayName: 'Tallinn, Estonia' },
+  { name: 'Riga', country: 'Latvia', displayName: 'Riga, Latvia' },
+  { name: 'Vilnius', country: 'Lithuania', displayName: 'Vilnius, Lithuania' },
+  { name: 'Tokyo', country: 'Japan', displayName: 'Tokyo, Japan' },
   { name: 'Beijing', country: 'China', displayName: 'Beijing, China' },
-  { name: 'Sydney', country: 'Australia', state: 'New South Wales', displayName: 'Sydney, New South Wales, Australia' },
-  { name: 'Toronto', country: 'Canada', state: 'Ontario', displayName: 'Toronto, Ontario, Canada' },
-  { name: 'Seoul', country: 'South Korea', displayName: 'Seoul, South Korea' }
+  { name: 'Sydney', country: 'Australia', displayName: 'Sydney, Australia' },
+  { name: 'Toronto', country: 'Canada', displayName: 'Toronto, Canada' },
+  { name: 'Mumbai', country: 'India', displayName: 'Mumbai, India' },
+  { name: 'Sao Paulo', country: 'Brazil', displayName: 'Sao Paulo, Brazil' },
+  { name: 'Cairo', country: 'Egypt', displayName: 'Cairo, Egypt' },
+  { name: 'Mexico City', country: 'Mexico', displayName: 'Mexico City, Mexico' },
+  { name: 'Bangkok', country: 'Thailand', displayName: 'Bangkok, Thailand' },
+  { name: 'Moscow', country: 'Russia', displayName: 'Moscow, Russia' },
+  { name: 'Kiev', country: 'Ukraine', displayName: 'Kiev, Ukraine' },
+  { name: 'Minsk', country: 'Belarus', displayName: 'Minsk, Belarus' },
+  { name: 'Chisinau', country: 'Moldova', displayName: 'Chisinau, Moldova' },
+  { name: 'Bratislava', country: 'Slovakia', displayName: 'Bratislava, Slovakia' },
+  { name: 'Ljubljana', country: 'Slovenia', displayName: 'Ljubljana, Slovenia' },
+  { name: 'Podgorica', country: 'Montenegro', displayName: 'Podgorica, Montenegro' },
+  { name: 'Tirane', country: 'Albania', displayName: 'Tirane, Albania' },
+  { name: 'Skopje', country: 'North Macedonia', displayName: 'Skopje, North Macedonia' },
+  { name: 'Sarajevo', country: 'Bosnia and Herzegovina', displayName: 'Sarajevo, Bosnia and Herzegovina' }
 ];
 
 export function AutocompleteSearch({ 
@@ -73,8 +108,7 @@ export function AutocompleteSearch({
     // Search in popular cities
     POPULAR_CITIES.forEach(city => {
       if (city.name.toLowerCase().includes(query) || 
-          city.country.toLowerCase().includes(query) ||
-          (city.state && city.state.toLowerCase().includes(query))) {
+          city.country.toLowerCase().includes(query)) {
         results.push(city);
       }
     });

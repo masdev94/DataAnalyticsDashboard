@@ -37,6 +37,8 @@ class ApiService {
   // Weather API
   async getWeatherData(city: string): Promise<ApiResponse<WeatherData>> {
     console.log('Weather API called with city:', city);
+    
+    // Weather data will use the country's timezone, not the client's timezone
     return this.request<WeatherData>(`/api/weather/${encodeURIComponent(city)}`);
   }
 
