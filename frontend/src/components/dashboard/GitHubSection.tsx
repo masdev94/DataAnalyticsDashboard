@@ -356,14 +356,14 @@ export function GitHubSection() {
                 </h3>
                 <div style={{ height: '400px' }}>
                   <ResponsiveContainer width="100%" height="100%">
-                                         <BarChart
+                    <BarChart
                        data={data.starsData}
                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                      >
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis />
-                      <Tooltip formatter={(value, name) => [value, name === 'stars' ? 'Stars' : 'Forks']} />
+                      <Tooltip formatter={(value, name) => [value, name === 'Stars' ? 'Stars' : 'Forks']} />
                       <Bar dataKey="stars" fill="#f59e0b" name="Stars" />
                       <Bar dataKey="forks" fill="#10b981" name="Forks" />
                     </BarChart>

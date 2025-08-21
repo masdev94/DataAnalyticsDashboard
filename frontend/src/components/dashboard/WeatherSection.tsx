@@ -5,7 +5,6 @@ import { useWeatherSection } from '../../hooks/useDashboardData';
 
 import { 
   FaCloudSun, 
-  FaTimes, 
   FaExclamationTriangle, 
   FaSpinner, 
   FaInfoCircle,
@@ -31,17 +30,12 @@ export function WeatherSection() {
     data, 
     loading, 
     error, 
-    search, 
-    clear, 
+    search,
     refresh, 
     hasData, 
     userLocation, 
     isDetectingLocation 
   } = useWeatherSection();
-
-  const handleClear = () => {
-    clear();
-  };
 
   const toggleUnits = () => {
     setUnits(prev => prev === 'metric' ? 'imperial' : 'metric');
@@ -139,13 +133,6 @@ export function WeatherSection() {
             disabled={loading}
           />
         </div>
-        
-        {hasData && (
-          <button onClick={handleClear} className="btn-secondary">
-            <FaTimes /> Clear
-          </button>
-        )}
-        
         <button 
           onClick={toggleUnits} 
           className="btn-secondary"

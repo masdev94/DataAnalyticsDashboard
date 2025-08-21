@@ -34,7 +34,6 @@ import {
 export function CryptocurrencySection() {
   const { data, loading, error, refresh, hasData } = useCryptoSection();
   const [showCharts, setShowCharts] = useState(true);
-  const [selectedTimeframe, setSelectedTimeframe] = useState('24h');
 
   if (error) {
     return (
@@ -123,23 +122,6 @@ export function CryptocurrencySection() {
                 {showCharts ? <FaEyeSlash /> : <FaEye />}
                 {showCharts ? 'Hide Charts' : 'Show Charts'}
               </button>
-              
-              <select
-                value={selectedTimeframe}
-                onChange={(e) => setSelectedTimeframe(e.target.value)}
-                style={{
-                  padding: '0.5rem',
-                  borderRadius: '0.375rem',
-                  border: '1px solid #d1d5db',
-                  backgroundColor: 'white',
-                  fontSize: '0.875rem'
-                }}
-              >
-                <option value="1h">1 Hour</option>
-                <option value="24h">24 Hours</option>
-                <option value="7d">7 Days</option>
-                <option value="30d">30 Days</option>
-              </select>
             </div>
 
             <div style={{ 

@@ -1,151 +1,44 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaSearch, FaMapMarkerAlt, FaGlobe } from 'react-icons/fa';
-
-interface CitySuggestion {
-  name: string;
-  country: string;
-  state?: string;
-  displayName: string;
-}
+import type { CitySuggestion } from '../../data/citiesSchema';
+import { useCitySearch } from '../../hooks/useCitySearch';
+import { POPULAR_CITIES } from '../../data/citiesSchema';
 
 interface AutocompleteSearchProps {
   onSearch: (city: string) => void;
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  cities?: CitySuggestion[];
 }
-
-// Popular cities database
-const POPULAR_CITIES = [
-  { name: 'Belgrade', country: 'Serbia', displayName: 'Belgrade, Serbia' },
-  { name: 'London', country: 'United Kingdom', displayName: 'London, United Kingdom' },
-  { name: 'New York', country: 'United States', displayName: 'New York, United States' },
-  { name: 'Paris', country: 'France', displayName: 'Paris, France' },
-  { name: 'Berlin', country: 'Germany', displayName: 'Berlin, Germany' },
-  { name: 'Zagreb', country: 'Croatia', displayName: 'Zagreb, Croatia' },
-  { name: 'Budapest', country: 'Hungary', displayName: 'Budapest, Hungary' },
-  { name: 'Prague', country: 'Czech Republic', displayName: 'Prague, Czech Republic' },
-  { name: 'Warsaw', country: 'Poland', displayName: 'Warsaw, Poland' },
-  { name: 'Rome', country: 'Italy', displayName: 'Rome, Italy' },
-  { name: 'Madrid', country: 'Spain', displayName: 'Madrid, Spain' },
-  { name: 'Amsterdam', country: 'Netherlands', displayName: 'Amsterdam, Netherlands' },
-  { name: 'Brussels', country: 'Belgium', displayName: 'Brussels, Belgium' },
-  { name: 'Vienna', country: 'Austria', displayName: 'Vienna, Austria' },
-  { name: 'Stockholm', country: 'Sweden', displayName: 'Stockholm, Sweden' },
-  { name: 'Oslo', country: 'Norway', displayName: 'Oslo, Norway' },
-  { name: 'Copenhagen', country: 'Denmark', displayName: 'Copenhagen, Denmark' },
-  { name: 'Helsinki', country: 'Finland', displayName: 'Helsinki, Finland' },
-  { name: 'Dublin', country: 'Ireland', displayName: 'Dublin, Ireland' },
-  { name: 'Lisbon', country: 'Portugal', displayName: 'Lisbon, Portugal' },
-  { name: 'Athens', country: 'Greece', displayName: 'Athens, Greece' },
-  { name: 'Bucharest', country: 'Romania', displayName: 'Bucharest, Romania' },
-  { name: 'Sofia', country: 'Bulgaria', displayName: 'Sofia, Bulgaria' },
-  { name: 'Tallinn', country: 'Estonia', displayName: 'Tallinn, Estonia' },
-  { name: 'Riga', country: 'Latvia', displayName: 'Riga, Latvia' },
-  { name: 'Vilnius', country: 'Lithuania', displayName: 'Vilnius, Lithuania' },
-  { name: 'Tokyo', country: 'Japan', displayName: 'Tokyo, Japan' },
-  { name: 'Beijing', country: 'China', displayName: 'Beijing, China' },
-  { name: 'Sydney', country: 'Australia', displayName: 'Sydney, Australia' },
-  { name: 'Toronto', country: 'Canada', displayName: 'Toronto, Canada' },
-  { name: 'Mumbai', country: 'India', displayName: 'Mumbai, India' },
-  { name: 'Sao Paulo', country: 'Brazil', displayName: 'Sao Paulo, Brazil' },
-  { name: 'Cairo', country: 'Egypt', displayName: 'Cairo, Egypt' },
-  { name: 'Mexico City', country: 'Mexico', displayName: 'Mexico City, Mexico' },
-  { name: 'Bangkok', country: 'Thailand', displayName: 'Bangkok, Thailand' },
-  { name: 'Moscow', country: 'Russia', displayName: 'Moscow, Russia' },
-  { name: 'Kiev', country: 'Ukraine', displayName: 'Kiev, Ukraine' },
-  { name: 'Minsk', country: 'Belarus', displayName: 'Minsk, Belarus' },
-  { name: 'Chisinau', country: 'Moldova', displayName: 'Chisinau, Moldova' },
-  { name: 'Bratislava', country: 'Slovakia', displayName: 'Bratislava, Slovakia' },
-  { name: 'Ljubljana', country: 'Slovenia', displayName: 'Ljubljana, Slovenia' },
-  { name: 'Podgorica', country: 'Montenegro', displayName: 'Podgorica, Montenegro' },
-  { name: 'Tirane', country: 'Albania', displayName: 'Tirane, Albania' },
-  { name: 'Skopje', country: 'North Macedonia', displayName: 'Skopje, North Macedonia' },
-  { name: 'Sarajevo', country: 'Bosnia and Herzegovina', displayName: 'Sarajevo, Bosnia and Herzegovina' }
-];
 
 export function AutocompleteSearch({ 
   onSearch, 
   placeholder = "Search for a city...", 
   disabled = false,
-  className = ""
+  className = "",
+  cities = POPULAR_CITIES
 }: AutocompleteSearchProps) {
-  const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Load recent searches from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('recentCitySearches');
-    if (saved) {
-      try {
-        setRecentSearches(JSON.parse(saved));
-      } catch (error) {
-        console.log('Error loading recent searches:', error);
-      }
-    }
-  }, []);
-
-  // Save recent searches to localStorage
-  const saveRecentSearch = (city: string) => {
-    const updated = [city, ...recentSearches.filter(s => s !== city)].slice(0, 5);
-    setRecentSearches(updated);
-    localStorage.setItem('recentCitySearches', JSON.stringify(updated));
-  };
-
-  // Generate suggestions based on query
-  const generateSuggestions = (searchQuery: string): CitySuggestion[] => {
-    if (searchQuery.length < 2) return [];
-
-    const query = searchQuery.toLowerCase();
-    const results: CitySuggestion[] = [];
-
-    // Search in popular cities
-    POPULAR_CITIES.forEach(city => {
-      if (city.name.toLowerCase().includes(query) || 
-          city.country.toLowerCase().includes(query)) {
-        results.push(city);
-      }
-    });
-
-    // Add dynamic suggestions
-    if (results.length < 5) {
-      const dynamicSuggestions: CitySuggestion[] = [
-        { name: `${searchQuery} City`, country: 'Search Results', displayName: `${searchQuery} City, Search Results` },
-        { name: `New ${searchQuery}`, country: 'Search Results', displayName: `New ${searchQuery}, Search Results` }
-      ];
-
-      dynamicSuggestions.forEach(suggestion => {
-        if (!results.some(r => r.name === suggestion.name)) {
-          results.push(suggestion);
-        }
-      });
-    }
-
-    return results.slice(0, 8);
-  };
+  
+  const {
+    query,
+    setQuery,
+    suggestions,
+    recentSearches,
+    loading,
+    updateSuggestions,
+    handleSuggestionSelect,
+    handleSearch
+  } = useCitySearch(cities);
 
   // Update suggestions when query changes
   useEffect(() => {
-    if (query.trim()) {
-      setLoading(true);
-      const timeoutId = setTimeout(() => {
-        const newSuggestions = generateSuggestions(query);
-        setSuggestions(newSuggestions);
-        setLoading(false);
-      }, 200);
-
-      return () => clearTimeout(timeoutId);
-    } else {
-      setSuggestions([]);
-      setLoading(false);
-    }
-  }, [query]);
+    updateSuggestions(query);
+  }, [query, updateSuggestions]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -160,9 +53,16 @@ export function AutocompleteSearch({
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (selectedIndex >= 0 && suggestions[selectedIndex]) {
-        handleSuggestionSelect(suggestions[selectedIndex]);
+        const suggestion = handleSuggestionSelect(suggestions[selectedIndex]);
+        setQuery(suggestion.displayName);
+        setShowSuggestions(false);
+        setSelectedIndex(-1);
+        onSearch(suggestion.displayName);
       } else if (query.trim()) {
-        handleSearch();
+        handleSearch(query);
+        onSearch(query.trim());
+        setShowSuggestions(false);
+        setSelectedIndex(-1);
       }
     } else if (e.key === 'Escape') {
       setShowSuggestions(false);
@@ -171,31 +71,26 @@ export function AutocompleteSearch({
   };
 
   // Handle suggestion selection
-  const handleSuggestionSelect = (suggestion: CitySuggestion) => {
-    setQuery(suggestion.displayName);
+  const handleSuggestionClick = (suggestion: CitySuggestion) => {
+    const selected = handleSuggestionSelect(suggestion);
+    setQuery(selected.displayName);
     setShowSuggestions(false);
     setSelectedIndex(-1);
-    saveRecentSearch(suggestion.displayName);
-    onSearch(suggestion.displayName);
+    onSearch(selected.displayName);
   };
 
   // Handle search submission
-  const handleSearch = () => {
+  const handleSearchClick = () => {
     if (query.trim()) {
-      const searchQuery = query.trim();
-      saveRecentSearch(searchQuery);
-      onSearch(searchQuery);
+      handleSearch(query);
+      onSearch(query.trim());
       setShowSuggestions(false);
       setSelectedIndex(-1);
     }
   };
 
-  // Handle input focus
-  const handleFocus = () => {
-    setShowSuggestions(true);
-  };
-
-  // Handle input blur
+  // Handle input focus/blur
+  const handleFocus = () => setShowSuggestions(true);
   const handleBlur = () => {
     setTimeout(() => {
       setShowSuggestions(false);
@@ -269,7 +164,7 @@ export function AutocompleteSearch({
 
         {/* Search Button */}
         <button 
-          onClick={handleSearch}
+          onClick={handleSearchClick}
           className="btn-primary"
           disabled={disabled || !query.trim()}
           style={{ 
@@ -359,7 +254,7 @@ export function AutocompleteSearch({
               {suggestions.map((suggestion, index) => (
                 <div
                   key={`suggestion-${index}`}
-                  onClick={() => handleSuggestionSelect(suggestion)}
+                  onClick={() => handleSuggestionClick(suggestion)}
                   style={{
                     padding: '0.75rem 1rem',
                     cursor: 'pointer',
