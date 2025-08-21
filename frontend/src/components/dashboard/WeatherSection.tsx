@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Card } from '../ui/Card';
+import { AutocompleteSearch } from '../ui/AutocompleteSearch';
 import { useWeatherSection } from '../../hooks/useSectionHooks';
 import { 
   formatPressure, 
@@ -8,7 +9,6 @@ import {
 } from '../../utils/formatters';
 import { 
   FaCloudSun, 
-  FaSearch, 
   FaTimes, 
   FaExclamationTriangle, 
   FaSpinner, 
@@ -30,7 +30,6 @@ import {
 } from 'react-icons/fa';
 
 export function WeatherSection() {
-  const [cityInput, setCityInput] = useState('');
   const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
   const { 
     data, 
@@ -44,18 +43,7 @@ export function WeatherSection() {
     isDetectingLocation 
   } = useWeatherSection();
 
-  const handleSearch = () => {
-    search(cityInput);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
   const handleClear = () => {
-    setCityInput('');
     clear();
   };
 
@@ -147,38 +135,21 @@ export function WeatherSection() {
       )}
 
       {/* Search Controls */}
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-        <input
-          type="text"
-          value={cityInput}
-          onChange={(e) => setCityInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Search for a city..."
-          style={{
-            flex: 1,
-            minWidth: '200px',
-            padding: '0.75rem 1rem',
-            border: '2px solid #e5e7eb',
-            borderRadius: '0.5rem',
-            fontSize: '1rem',
-            transition: 'border-color 0.2s'
-          }}
-          onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
-          onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
-        />
-        <button 
-          onClick={handleSearch} 
-          className="btn-primary"
-          disabled={loading}
-        >
-          <FaSearch />
-          {loading ? ' Loading...' : ' Search'}
-        </button>
+      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+        <div style={{ flex: 1, minWidth: '300px' }}>
+          <AutocompleteSearch 
+            onSearch={search}
+            placeholder="Search for a city..."
+            disabled={loading}
+          />
+        </div>
+        
         {hasData && (
           <button onClick={handleClear} className="btn-secondary">
             <FaTimes /> Clear
           </button>
         )}
+        
         <button 
           onClick={toggleUnits} 
           className="btn-secondary"
@@ -206,7 +177,7 @@ export function WeatherSection() {
             borderRadius: '0.5rem',
             border: '2px dashed #d1d5db'
           }}>
-            <FaSearch style={{ fontSize: '2rem', marginBottom: '1rem', display: 'block', color: '#9ca3af' }} />
+            <FaMapMarkerAlt style={{ fontSize: '2rem', marginBottom: '1rem', display: 'block', color: '#9ca3af' }} />
             <p>Weather information will be automatically loaded for your location</p>
             <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>Or search for any city above</p>
             <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: '#9ca3af' }}>Powered by Open-Meteo API</p>
