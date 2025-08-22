@@ -114,7 +114,7 @@ The frontend will be available at `http://localhost:5173`
 ```bash
 cd backend
 npm install
-npm start
+npm start or npm run dev
 ```
 
 The backend API will be available at `http://localhost:5000`
