@@ -70,9 +70,6 @@ export function Dashboard() {
           color: '#cbd5e1', 
           opacity: '0.9' 
         }}>
-          <p style={{ fontSize: '1.125rem', color: '#f1f5f9' }}>
-            Built with React, TypeScript, Vite, and TailwindCSS
-          </p>
           <p style={{ fontSize: '0.875rem', marginTop: '0.5rem', color: '#94a3b8' }}>
             Clean, modular, and scalable architecture
           </p>
