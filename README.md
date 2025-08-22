@@ -6,9 +6,9 @@ A comprehensive, real-time data analytics dashboard that fetches and processes i
 
 This application is a **Data Analytics Dashboard** that aggregates and visualizes real-time data from three key sources:
 
-- ** Cryptocurrency Market Data**: Real-time cryptocurrency prices, market caps, and 24h performance from CoinGecko API
-- ** GitHub Trending Repositories**: Popular repositories, programming language trends, and developer insights from GitHub API
-- ** Global Weather Information**: Current weather data with IP-based location detection and city search from Open-Meteo API
+- Cryptocurrency Market Data: Real-time cryptocurrency prices, market caps, and 24h performance from CoinGecko API
+- GitHub Trending Repositories: Popular repositories, programming language trends, and developer insights from GitHub API
+- Global Weather Information: Current weather data with IP-based location detection and city search from Open-Meteo API
 
 The dashboard processes this raw data through intelligent algorithms to provide:
 - Market trend analysis and performance metrics
