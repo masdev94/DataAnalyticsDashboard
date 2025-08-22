@@ -9,7 +9,12 @@ node_modules/
 .env.test.local
 .env.production.local
 backend/.env
+backend/.env.example
+backend/.env.production.example
+
 frontend/.env
+frontend/.env.example
+frontend/.env.production.example
 
 # Build outputs
 dist/
