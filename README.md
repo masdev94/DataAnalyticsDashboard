@@ -51,21 +51,21 @@ The dashboard processes this raw data through intelligent algorithms to provide:
 ##  UX/DX Touches That Make the App Delightful
 
 ### **User Experience Enhancements:**
-- ** Professional Dark Theme**: Easy on the eyes with professional color scheme
-- ** Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- ** Real-time Updates**: Live data refresh with loading states and error handling
-- ** Interactive Charts**: Hover effects, zoom capabilities, and responsive visualizations
-- ** Smart Search**: Autocomplete city search with recent search history
-- ** Pagination**: Clean, modern pagination for large datasets
-- ** Smooth Animations**: Subtle hover effects and transitions for better engagement
+-  Professional Dark Theme: Easy on the eyes with professional color scheme
+-  Responsive Design: Works seamlessly on desktop, tablet, and mobile devices
+-  Real-time Updates: Live data refresh with loading states and error handling
+-  Interactive Charts: Hover effects, zoom capabilities, and responsive visualizations
+-  Smart Search: Autocomplete city search with recent search history
+-  Pagination: Clean, modern pagination for large datasets
+-  Smooth Animations: Subtle hover effects and transitions for better engagement
 
 ### **Developer Experience Features:**
-- ** Modular Architecture**: Clean separation of concerns with reusable components
-- ** TypeScript**: Full type safety and better development experience
-- ** Custom Hooks**: Reusable logic for data fetching and state management
-- ** Error Boundaries**: Graceful error handling and recovery
-- ** Component Library**: Consistent UI components with proper styling
-- ** Fast Development**: Hot reload and optimized build process
+-  Modular Architecture: Clean separation of concerns with reusable components
+-  TypeScript: Full type safety and better development experience
+-  Custom Hooks: Reusable logic for data fetching and state management
+-  Error Boundaries: Graceful error handling and recovery
+-  Component Library: Consistent UI components with proper styling
+-  Fast Development: Hot reload and optimized build process
 
 ##  Architecture Overview
 
