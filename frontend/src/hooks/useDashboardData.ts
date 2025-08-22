@@ -103,7 +103,6 @@ export function useWeatherData() {
   };
 }
 
-// Enhanced Crypto Section Hook
 export function useCryptoSection() {
   const { data, loading, error, refresh } = useCryptoData();
 
@@ -111,14 +110,12 @@ export function useCryptoSection() {
     if (!data) return null;
 
     return {
-      // Market Overview
       marketOverview: {
         totalMarketCap: data.totalMarketCap,
         totalCoins: data.coins.length,
         averagePrice: data.averagePrice
       },
       
-      // Top Gainers (top 5)
       topGainers: data.coins
         .filter(coin => coin.price_change_percentage_24h > 0)
         .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
@@ -128,7 +125,6 @@ export function useCryptoSection() {
           change: formatPercentage(coin.price_change_percentage_24h)
         })),
       
-      // Top Losers (top 5)
       topLosers: data.coins
         .filter(coin => coin.price_change_percentage_24h < 0)
         .sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h)
@@ -138,7 +134,6 @@ export function useCryptoSection() {
           change: formatPercentage(coin.price_change_percentage_24h)
         })),
       
-      // Top Coins by Market Cap
       topByMarketCap: data.coins
         .sort((a, b) => b.market_cap - a.market_cap)
         .slice(0, 10)
@@ -161,7 +156,6 @@ export function useCryptoSection() {
   };
 }
 
-// Enhanced GitHub Section Hook
 export function useGitHubSection() {
   const { data, loading, error, refresh } = useGitHubData();
 
@@ -169,7 +163,6 @@ export function useGitHubSection() {
     if (!data) return null;
 
     return {
-      // Overview Statistics
       overview: {
         totalRepos: data.totalRepos,
         totalStars: data.totalStars,
@@ -177,7 +170,6 @@ export function useGitHubSection() {
         averageStars: data.averageStars
       },
       
-      // Chart Data for Languages
       chartData: Object.entries(data.topLanguages)
         .sort(([, a], [, b]) => b - a)
         .slice(0, 8)
@@ -187,7 +179,6 @@ export function useGitHubSection() {
           percentage: Math.round((count / data.totalRepos) * 100)
         })),
       
-      // Bar Chart Data for Stars vs Forks
       starsData: data.topRepos
         .slice(0, 10)
         .map(repo => ({
@@ -197,7 +188,6 @@ export function useGitHubSection() {
           fullName: repo.full_name
         })),
       
-      // Repository Data for Pagination
       repositories: data.topRepos,
       totalRepos: data.totalRepos
     };
@@ -212,18 +202,15 @@ export function useGitHubSection() {
   };
 }
 
-// Enhanced Weather Section Hook
 export function useWeatherSection() {
   const { data, loading, error, fetch, clear } = useWeatherData();
   const [userLocation, setUserLocation] = useState<string | null>(null);
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
 
-  // Detect user's IP location on component mount
   useEffect(() => {
     const detectUserLocation = async () => {
       setIsDetectingLocation(true);
       try {
-        // Use the API service for IP geolocation
         const response = await apiService.getIpLocation();
         if (response.error) {
           throw new Error(response.error);
@@ -233,12 +220,10 @@ export function useWeatherSection() {
         if (locationData.city && locationData.country_name) {
           const location = `${locationData.city}, ${locationData.country_name}`;
           setUserLocation(location);
-          // Automatically fetch weather for user's location
           fetch(locationData.city);
         }
       } catch (error) {
         console.log('Could not detect user location:', error);
-        // Fallback to a default city
         setUserLocation('London, United Kingdom');
         fetch('London');
       } finally {
@@ -246,23 +231,20 @@ export function useWeatherSection() {
       }
     };
 
-    // Only detect location if no weather data exists
     if (!data && !loading) {
       detectUserLocation();
     }
-  }, []); // Removed dependencies to avoid infinite loops
+  }, []); 
 
   const processedData = useMemo(() => {
     if (!data) return null;
 
     return {
-      // City Info
       cityInfo: {
         name: data.city || 'Unknown',
         country: data.country || 'Unknown',
         timezone: data.timezone || 'Unknown',
         lastUpdated: data.timestamp || new Date().toISOString(),
-        // Format time in the country's timezone
         localTime: data.timezone ? 
           new Date().toLocaleString('en-US', { 
             timeZone: data.timezone,
@@ -277,7 +259,6 @@ export function useWeatherSection() {
           new Date().toLocaleString()
       },
       
-      // Weather Stats
       weatherStats: {
         temperature: data.temperature || 0,
         feelsLike: data.feelsLike || 0,
@@ -287,7 +268,6 @@ export function useWeatherSection() {
         description: data.description || 'Unknown'
       },
       
-      // Formatted Values
       formatted: {
         temperature: `${data.temperature || 0}°C`,
         feelsLike: `${data.feelsLike || 0}°C`,
@@ -309,15 +289,12 @@ export function useWeatherSection() {
   };
 
   const refreshWeather = () => {
-    // Refresh weather for the current city if available
     if (data?.city) {
       fetch(data.city);
     } else if (userLocation) {
-      // If no current data but we have user location, fetch for that
       const cityName = userLocation.split(',')[0];
       fetch(cityName);
     } else {
-      // Fallback to London
       fetch('London');
     }
   };
@@ -335,7 +312,6 @@ export function useWeatherSection() {
   };
 }
 
-// Dashboard Overview Hook
 export function useDashboardOverview() {
   const cryptoHook = useCryptoSection();
   const githubHook = useGitHubSection();

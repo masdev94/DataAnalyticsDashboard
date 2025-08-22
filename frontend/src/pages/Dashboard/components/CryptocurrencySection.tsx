@@ -35,7 +35,6 @@ export function CryptocurrencySection() {
   const { data, loading, error, refresh, hasData } = useCryptoSection();
   const [showCharts, setShowCharts] = useState(true);
 
-  // Handle loading state with spinner
   if (loading) {
     return (
       <Card title="Cryptocurrency Market Data" icon={<FaBitcoin />}>
@@ -47,7 +46,6 @@ export function CryptocurrencySection() {
     );
   }
 
-  // Handle error state gracefully
   if (error) {
     return (
       <Card title="Cryptocurrency Market Data" icon={<FaBitcoin />}>
@@ -60,7 +58,6 @@ export function CryptocurrencySection() {
     );
   }
 
-  // Handle no data state
   if (!hasData || !data) {
     return (
       <Card title="Cryptocurrency Market Data" icon={<FaBitcoin />}>

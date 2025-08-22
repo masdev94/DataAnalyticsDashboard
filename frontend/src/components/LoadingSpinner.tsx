@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaSpinner } from 'react-icons/fa';
 
 interface LoadingSpinnerProps {
@@ -44,7 +43,6 @@ export function LoadingSpinner({ size = 'medium', text, className = '' }: Loadin
   );
 }
 
-// Skeleton loading component for better UX
 export function SkeletonLoader({ 
   lines = 3, 
   height = '1rem', 
@@ -74,7 +72,6 @@ export function SkeletonLoader({
   );
 }
 
-// Card skeleton for dashboard sections
 export function CardSkeleton({ 
   title = true, 
   stats = 4, 
@@ -124,7 +121,6 @@ export function CardSkeleton({
   );
 }
 
-// Add CSS animation
 const style = document.createElement('style');
 style.textContent = `
   @keyframes pulse {

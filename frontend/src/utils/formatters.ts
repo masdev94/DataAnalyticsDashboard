@@ -1,4 +1,3 @@
-// Format currency values
 export function formatCurrency(value: number): string {
   if (value >= 1e12) {
     return `$${(value / 1e12).toFixed(2)}T`;
@@ -13,7 +12,6 @@ export function formatCurrency(value: number): string {
   }
 }
 
-// Format numbers for display
 export function formatNumber(value: number): string {
   if (value >= 1e6) {
     return `${(value / 1e6).toFixed(1)}M`;
@@ -24,7 +22,6 @@ export function formatNumber(value: number): string {
   }
 }
 
-// Format percentage changes with color
 export function formatPercentage(value: number): { text: string; color: string; icon: string } {
   const formatted = value.toFixed(2);
   const color = value >= 0 ? '#10b981' : '#ef4444';
@@ -37,27 +34,22 @@ export function formatPercentage(value: number): { text: string; color: string; 
   };
 }
 
-// Format timestamp
 export function formatTimestamp(timestamp: string): string {
   return new Date(timestamp).toLocaleString();
 }
 
-// Format temperature
 export function formatTemperature(temp: number): string {
   return `${temp.toFixed(1)}°C`;
 }
 
-// Format pressure
 export function formatPressure(pressure: number): string {
   return `${pressure} hPa`;
 }
 
-// Format wind speed
 export function formatWindSpeed(speed: number): string {
   return `${speed} m/s`;
 }
 
-// Format humidity
 export function formatHumidity(humidity: number): string {
   return `${humidity}%`;
 }

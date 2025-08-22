@@ -2,7 +2,6 @@ import { createContext, useContext, useReducer } from 'react';
 import type { ReactNode } from 'react';
 import type { DashboardState, LoadingState, ErrorState, CryptoData, GitHubData, WeatherData } from '../types/index';
 
-// Action Types
 type DashboardAction =
   | { type: 'SET_CRYPTO_DATA'; payload: CryptoData }
   | { type: 'SET_GITHUB_DATA'; payload: GitHubData }
@@ -12,7 +11,6 @@ type DashboardAction =
   | { type: 'CLEAR_ERROR'; payload: keyof ErrorState }
   | { type: 'RESET_STATE' };
 
-// Initial State
 const initialState: DashboardState = {
   crypto: null,
   github: null,
@@ -29,7 +27,6 @@ const initialState: DashboardState = {
   },
 };
 
-// Reducer
 function dashboardReducer(state: DashboardState, action: DashboardAction): DashboardState {
   switch (action.type) {
     case 'SET_CRYPTO_DATA':
@@ -89,7 +86,6 @@ function dashboardReducer(state: DashboardState, action: DashboardAction): Dashb
   }
 }
 
-// Context
 interface DashboardContextType {
   state: DashboardState;
   dispatch: React.Dispatch<DashboardAction>;
@@ -97,7 +93,6 @@ interface DashboardContextType {
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
-// Provider Component
 interface DashboardProviderProps {
   children: ReactNode;
 }
@@ -112,7 +107,6 @@ export function DashboardProvider({ children }: DashboardProviderProps) {
   );
 }
 
-// Custom Hook
 export function useDashboard() {
   const context = useContext(DashboardContext);
   if (context === undefined) {

@@ -1,4 +1,3 @@
-// Cryptocurrency Types
 export interface Cryptocurrency {
   id: string;
   symbol: string;
@@ -40,7 +39,6 @@ export interface CryptoData {
   coins: Cryptocurrency[];
 }
 
-// GitHub Types
 export interface GitHubRepository {
   id: number;
   node_id: string;
@@ -159,7 +157,6 @@ export interface GitHubData {
   averageStars: number;
 }
 
-// Weather Data Types
 export interface WeatherData {
   city: string;
   country: string;
@@ -174,28 +171,24 @@ export interface WeatherData {
   localTime: string;
 }
 
-// API Response Types
 export interface ApiResponse<T> {
   data?: T;
   error?: string;
   message?: string;
 }
 
-// Loading States
 export interface LoadingState {
   crypto: boolean;
   github: boolean;
   weather: boolean;
 }
 
-// Error States
 export interface ErrorState {
   crypto: string | null;
   github: string | null;
   weather: string | null;
 }
 
-// Dashboard State
 export interface DashboardState {
   crypto: CryptoData | null;
   github: GitHubData | null;
@@ -204,7 +197,6 @@ export interface DashboardState {
   errors: ErrorState;
 }
 
-// Enhanced Error Types for Better Edge Case Handling
 export interface ErrorInfo {
   message: string;
   code?: string;

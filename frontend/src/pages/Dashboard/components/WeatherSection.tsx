@@ -340,7 +340,7 @@ export function WeatherSection() {
               Units
             </div>
             <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f293b' }}>
-              {units === 'metric' ? 'Metric (°C, m/s)' : 'Imperial (°F, mph)'}
+              {units === 'metric' ? 'Metric (°C, km/h)' : 'Imperial (°F, mph)'}
             </div>
           </div>
         </div>

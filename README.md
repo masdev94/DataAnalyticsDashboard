@@ -191,7 +191,7 @@ MAX_REQUESTS_PER_MINUTE=100
 ##  Technologies Used
 
 ### **Frontend**
-- **React 18** - Modern React with hooks and context
+- **React 19** - Modern React with hooks and context
 - **TypeScript** - Type safety and better development experience
 - **Vite** - Fast build tool and development server
 - **TailwindCSS** - Utility-first CSS framework
@@ -272,10 +272,6 @@ npm start
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
-
-##  License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ##  Acknowledgments
 

@@ -152,7 +152,6 @@ export function EmptyState({
   );
 }
 
-// No data found component
 export function NoDataFound({ 
   message = 'No data available',
   onRefresh,

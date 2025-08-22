@@ -84,7 +84,6 @@ export function ConnectionStatus({ onRetry }: ConnectionStatusProps) {
   );
 }
 
-// Add CSS animation
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideIn {

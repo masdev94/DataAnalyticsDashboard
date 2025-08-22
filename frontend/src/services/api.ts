@@ -1,6 +1,5 @@
 import type { CryptoData, GitHubData, WeatherData, ApiResponse } from '../types/index.js';
 
-// Environment Variables
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 const IP_GEOLOCATION_API = import.meta.env.VITE_IP_GEOLOCATION_API || 'https://ipapi.co/json/';
 const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT || '10000');
@@ -42,17 +41,14 @@ class ApiService {
     }
   }
 
-  // Cryptocurrency API
   async getCryptoData(): Promise<ApiResponse<CryptoData>> {
     return this.request<CryptoData>('/api/crypto');
   }
 
-  // GitHub API
   async getGitHubData(): Promise<ApiResponse<GitHubData>> {
     return this.request<GitHubData>('/api/github');
   }
 
-  // Weather API
   async getWeatherData(city: string): Promise<ApiResponse<WeatherData>> {
     if (ENABLE_DEBUG_LOGGING) {
       console.log('Weather API called with city:', city);
@@ -61,12 +57,10 @@ class ApiService {
     return this.request<WeatherData>(`/api/weather/${encodeURIComponent(city)}`);
   }
 
-  // Health check
   async getHealth(): Promise<ApiResponse<{ status: string; timestamp: string }>> {
     return this.request<{ status: string; timestamp: string }>('/health');
   }
 
-  // IP Geolocation (for weather location detection)
   async getIpLocation(): Promise<any> {
     try {
       if (ENABLE_DEBUG_LOGGING) {

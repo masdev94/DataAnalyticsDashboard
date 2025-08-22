@@ -10,7 +10,6 @@ export const generateCitySuggestions = (
   const query = searchQuery.toLowerCase();
   const results: CitySuggestion[] = [];
 
-  // Search in popular cities
   cities.forEach(city => {
     if (city.name.toLowerCase().includes(query) || 
         city.country.toLowerCase().includes(query)) {
@@ -18,7 +17,6 @@ export const generateCitySuggestions = (
     }
   });
 
-  // Add dynamic suggestions if needed
   if (results.length < maxResults) {
     const dynamicSuggestions: CitySuggestion[] = [
       { 

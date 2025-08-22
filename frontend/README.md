@@ -2,14 +2,14 @@
 
 A modern, responsive React dashboard application built with TypeScript, Vite, and TailwindCSS that provides real-time insights from multiple data sources with comprehensive error handling and environment configuration.
 
-## ✨ Features
+##  Features
 
-### 🚀 **Core Functionality**
+###  **Core Functionality**
 - **Cryptocurrency Market Data**: Real-time crypto prices, market cap, trends, and interactive charts
 - **GitHub Trending Repositories**: Popular repositories with charts, pagination, and language analysis
 - **Weather Information**: Current weather with IP-based location detection, search, and unit conversion
 
-### 🛡️ **Error Handling & Edge Cases**
+###  **Error Handling & Edge Cases**
 - **Error Boundaries**: Catches and displays errors gracefully at component level
 - **Connection Status**: Real-time network connectivity monitoring with retry mechanisms
 - **Loading States**: Skeleton loading, spinners, and smooth transitions
@@ -17,7 +17,7 @@ A modern, responsive React dashboard application built with TypeScript, Vite, an
 - **Retry Mechanisms**: Easy recovery from temporary failures
 - **Timeout Handling**: Configurable API timeouts with AbortController
 
-### 🎨 **User Experience**
+###  **User Experience**
 - **Responsive Design**: Works seamlessly on all device sizes
 - **Modern UI Components**: Clean, accessible interface with smooth animations
 - **Interactive Charts**: Data visualization using Recharts with custom colors
@@ -25,7 +25,7 @@ A modern, responsive React dashboard application built with TypeScript, Vite, an
 - **Unit Conversion**: Metric/Imperial toggle for weather data
 - **Professional Styling**: Dark theme with blue accents and modern card design
 
-## 🏗️ **Architecture**
+##  **Architecture**
 
 ### **Component Structure**
 ```
@@ -68,7 +68,7 @@ src/
 4. **User Level**: Clear error messages with retry options
 5. **API Level**: Timeout handling and fallback responses
 
-## 🚀 **Getting Started**
+##  **Getting Started**
 
 ### **Prerequisites**
 - Node.js 20+ 
@@ -125,7 +125,7 @@ npm run build
 - **HTTP Client**: Fetch API with AbortController for timeouts
 - **Type Safety**: Full TypeScript implementation
 
-## 📱 **Responsive Design**
+##  **Responsive Design**
 
 The dashboard is fully responsive with:
 - Mobile-first approach
@@ -135,7 +135,7 @@ The dashboard is fully responsive with:
 - Optimized for all screen sizes
 - Professional dark theme with blue accents
 
-## 🎯 **Performance Features**
+##  **Performance Features**
 
 - **Lazy Loading**: Components load on demand
 - **Memoization**: Optimized re-renders with useMemo
@@ -145,7 +145,7 @@ The dashboard is fully responsive with:
 - **API Timeouts**: Prevents hanging requests
 - **AbortController**: Cancels ongoing requests when needed
 
-## 🛡️ **Error Recovery**
+##  **Error Recovery**
 
 ### **Automatic Recovery**
 - Network reconnection detection
@@ -159,14 +159,14 @@ The dashboard is fully responsive with:
 - Clear error messages with actionable steps
 - Connection status indicators
 
-## 🔍 **Data Sources**
+##  **Data Sources**
 
 - **Cryptocurrency**: CoinGecko API with fallback data
 - **GitHub**: GitHub REST API for trending repositories
 - **Weather**: Open-Meteo API with geocoding
 - **Location**: IP Geolocation Service for automatic detection
 
-## 📊 **Monitoring & Analytics**
+##  **Monitoring & Analytics**
 
 - Real-time connection status
 - Error tracking and logging
@@ -175,7 +175,7 @@ The dashboard is fully responsive with:
 - Debug logging (configurable)
 - Network request monitoring
 
-## 🎨 **UI/UX Features**
+##  **UI/UX Features**
 
 - **Professional Design**: Dark theme with slate/navy gradients
 - **Interactive Elements**: Hover effects, smooth transitions
@@ -185,7 +185,7 @@ The dashboard is fully responsive with:
 - **Loading States**: Multiple loading indicators
 - **Error States**: User-friendly error messages
 
-## 🚀 **Future Enhancements**
+##  **Future Enhancements**
 
 - [ ] Offline support with service workers
 - [ ] Real-time data updates with WebSockets
@@ -198,7 +198,7 @@ The dashboard is fully responsive with:
 - [ ] Advanced chart customization
 - [ ] Data export and sharing
 
-## 🔒 **Security & Configuration**
+##  **Security & Configuration**
 
 - **Environment Variables**: Secure configuration management
 - **API Timeouts**: Prevents hanging requests
@@ -206,7 +206,7 @@ The dashboard is fully responsive with:
 - **CORS Handling**: Proper cross-origin requests
 - **Input Validation**: Sanitized user inputs
 
-## 🤝 **Contributing**
+##  **Contributing**
 
 1. Fork the repository
 2. Create a feature branch
@@ -216,10 +216,6 @@ The dashboard is fully responsive with:
 6. Ensure TypeScript compliance
 7. Submit a pull request
 
-## 📄 **License**
-
-This project is licensed under the MIT License.
-
 ---
 
-**Built with ❤️ using React, TypeScript, Vite, and TailwindCSS**
+**Built with  using React, TypeScript, Vite, and TailwindCSS**
