@@ -1,10 +1,36 @@
 # Dependencies
 node_modules/
+*/node_modules/
+
+# Environment variables (keep examples, ignore actual .env files)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+frontend/.env
+
+# Build outputs
+dist/
+build/
+*/dist/
+*/build/
+
+# Vite specific
+.vite/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
 lerna-debug.log*
+.pnpm-debug.log*
 
 # Runtime data
 pids
@@ -19,23 +45,8 @@ coverage/
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-# Bower dependency directory (https://bower.io/)
-bower_components
-
-# node-waf configuration
-.lock-wscript
-
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
-
 # Dependency directories
 jspm_packages/
-
-# TypeScript cache
-*.tsbuildinfo
 
 # Optional npm cache directory
 .npm
@@ -61,15 +72,6 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-.env.test
-.env.production
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -80,48 +82,20 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/
-public
 
-# Vuepress build output
-.vuepress/dist
+# Storybook build outputs
+.out
+.storybook-out
+storybook-static
 
-# Serverless directories
-.serverless/
+# Temporary folders
+tmp/
+temp/
 
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
-
-# Frontend specific
-frontend/node_modules/
-frontend/dist/
-frontend/build/
-frontend/.env
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
-
-# IDE and Editor files
+# Editor directories and files
 .vscode/
 .idea/
 *.swp
@@ -137,22 +111,25 @@ frontend/.env.production.local
 ehthumbs.db
 Thumbs.db
 
-# Logs
-logs
-*.log
-
-# Temporary files
-tmp/
-temp/
-
-# Build outputs
-build/
-dist/
-
-# Package manager files
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# Local development files
+# Local development
 *.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# IDE specific files (uncomment if you want to ignore IDE settings)
+# .vscode/settings.json
+# .vscode/launch.json
+# .vscode/extensions.json
+# .idea/workspace.xml
+# .idea/tasks.xml
+# .idea/usage.statistics.xml
+# .idea/dictionaries/
+# .idea/shelf/

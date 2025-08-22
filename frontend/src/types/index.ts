@@ -170,8 +170,8 @@ export interface WeatherData {
   description: string;
   windSpeed: number;
   timestamp: string;
-  units: string;
   timezone: string;
+  localTime: string;
 }
 
 // API Response Types
@@ -202,4 +202,18 @@ export interface DashboardState {
   weather: WeatherData | null;
   loading: LoadingState;
   errors: ErrorState;
+}
+
+// Enhanced Error Types for Better Edge Case Handling
+export interface ErrorInfo {
+  message: string;
+  code?: string;
+  retryable: boolean;
+  timestamp: string;
+}
+
+export interface ConnectionStatus {
+  isOnline: boolean;
+  lastCheck: string;
+  retryCount: number;
 }

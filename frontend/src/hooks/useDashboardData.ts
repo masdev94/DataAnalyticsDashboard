@@ -223,13 +223,13 @@ export function useWeatherSection() {
     const detectUserLocation = async () => {
       setIsDetectingLocation(true);
       try {
-        // Use a free IP geolocation service
-        const response = await globalThis.fetch('https://ipapi.co/json/');
-        if (!response.ok) {
-          throw new Error('Failed to fetch location data');
+        // Use the API service for IP geolocation
+        const response = await apiService.getIpLocation();
+        if (response.error) {
+          throw new Error(response.error);
         }
-        const locationData = await response.json();
         
+        const locationData = response.data;
         if (locationData.city && locationData.country_name) {
           const location = `${locationData.city}, ${locationData.country_name}`;
           setUserLocation(location);
@@ -284,17 +284,16 @@ export function useWeatherSection() {
         humidity: data.humidity || 0,
         pressure: data.pressure || 0,
         windSpeed: data.windSpeed || 0,
-        description: data.description || 'Unknown',
-        units: data.units || 'metric'
+        description: data.description || 'Unknown'
       },
       
       // Formatted Values
       formatted: {
-        temperature: `${data.temperature || 0}°${(data.units || 'metric') === 'metric' ? 'C' : 'F'}`,
-        feelsLike: `${data.feelsLike || 0}°${(data.units || 'metric') === 'metric' ? 'C' : 'F'}`,
+        temperature: `${data.temperature || 0}°C`,
+        feelsLike: `${data.feelsLike || 0}°C`,
         humidity: `${data.humidity || 0}%`,
         pressure: `${data.pressure || 0} hPa`,
-        windSpeed: `${data.windSpeed || 0} ${(data.units || 'metric') === 'metric' ? 'm/s' : 'mph'}`
+        windSpeed: `${data.windSpeed || 0} m/s`
       }
     };
   }, [data]);
