@@ -71,7 +71,7 @@ src/
 ## 🚀 **Getting Started**
 
 ### **Prerequisites**
-- Node.js 16+ 
+- Node.js 20+ 
 - npm or yarn
 
 ### **Installation**

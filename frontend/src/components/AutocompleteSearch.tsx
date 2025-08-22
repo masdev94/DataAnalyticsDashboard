@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaSearch, FaMapMarkerAlt, FaGlobe } from 'react-icons/fa';
-import type { CitySuggestion } from '../../data/citiesSchema';
-import { useCitySearch } from '../../hooks/useCitySearch';
-import { POPULAR_CITIES } from '../../data/citiesSchema';
+import type { CitySuggestion } from '../data/citiesSchema';
+import { useCitySearch } from '../hooks/useCitySearch';
+import { POPULAR_CITIES } from '../data/citiesSchema';
 
 interface AutocompleteSearchProps {
   onSearch: (city: string) => void;
@@ -35,12 +35,10 @@ export function AutocompleteSearch({
     handleSearch
   } = useCitySearch(cities);
 
-  // Update suggestions when query changes
   useEffect(() => {
     updateSuggestions(query);
   }, [query, updateSuggestions]);
 
-  // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -70,7 +68,6 @@ export function AutocompleteSearch({
     }
   };
 
-  // Handle suggestion selection
   const handleSuggestionClick = (suggestion: CitySuggestion) => {
     const selected = handleSuggestionSelect(suggestion);
     setQuery(selected.displayName);
@@ -79,7 +76,6 @@ export function AutocompleteSearch({
     onSearch(selected.displayName);
   };
 
-  // Handle search submission
   const handleSearchClick = () => {
     if (query.trim()) {
       handleSearch(query);
@@ -89,7 +85,6 @@ export function AutocompleteSearch({
     }
   };
 
-  // Handle input focus/blur
   const handleFocus = () => setShowSuggestions(true);
   const handleBlur = () => {
     setTimeout(() => {
@@ -98,7 +93,6 @@ export function AutocompleteSearch({
     }, 200);
   };
 
-  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
     setShowSuggestions(true);
@@ -107,7 +101,6 @@ export function AutocompleteSearch({
 
   return (
     <div className={`autocomplete-search ${className}`} style={{ position: 'relative', width: '100%' }}>
-      {/* Search Input */}
       <div style={{ 
         display: 'flex', 
         gap: '0.5rem', 
@@ -136,7 +129,6 @@ export function AutocompleteSearch({
             }}
           />
           
-          {/* Search Icon */}
           <div style={{
             position: 'absolute',
             left: '0.75rem',
@@ -148,7 +140,6 @@ export function AutocompleteSearch({
             <FaSearch />
           </div>
 
-          {/* Loading Indicator */}
           {loading && (
             <div style={{
               position: 'absolute',
@@ -162,7 +153,6 @@ export function AutocompleteSearch({
           )}
         </div>
 
-        {/* Search Button */}
         <button 
           onClick={handleSearchClick}
           className="btn-primary"
@@ -177,7 +167,6 @@ export function AutocompleteSearch({
         </button>
       </div>
 
-      {/* Suggestions Dropdown */}
       {showSuggestions && (suggestions.length > 0 || recentSearches.length > 0) && (
         <div style={{
           position: 'absolute',
@@ -193,7 +182,6 @@ export function AutocompleteSearch({
           overflowY: 'auto',
           marginTop: '0.25rem'
         }}>
-          {/* Recent Searches */}
           {recentSearches.length > 0 && query.length < 2 && (
             <div>
               <div style={{
@@ -234,7 +222,6 @@ export function AutocompleteSearch({
             </div>
           )}
 
-          {/* City Suggestions */}
           {suggestions.length > 0 && (
             <div>
               {recentSearches.length > 0 && query.length < 2 && (
@@ -291,7 +278,6 @@ export function AutocompleteSearch({
             </div>
           )}
 
-          {/* No Results */}
           {suggestions.length === 0 && query.length >= 2 && !loading && (
             <div style={{
               padding: '1rem',

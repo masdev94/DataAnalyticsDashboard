@@ -1,6 +1,6 @@
 import { DashboardProvider } from './context/DashboardContext';
-import { Dashboard } from './components/pages';
-import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { Dashboard } from './pages/Dashboard';
 
 function App() {
   return (

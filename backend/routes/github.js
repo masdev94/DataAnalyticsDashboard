@@ -5,7 +5,6 @@ const { validateGitHubRequest } = require('../middleware/validation');
 const router = express.Router();
 const githubService = new GitHubService();
 
-// GET /api/github - Get GitHub trending repositories
 router.get('/', validateGitHubRequest, async (req, res) => {
   try {
     const data = await githubService.getTrendingRepos();

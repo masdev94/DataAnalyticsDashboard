@@ -1,9 +1,9 @@
-import { useGitHubSection } from '../../hooks/useDashboardData';
-import { Card } from '../ui/Card';
-import { StatsGrid } from '../ui/StatsGrid';
-import { LoadingSpinner } from '../ui/LoadingSpinner';
-import { ErrorMessage, NoDataFound } from '../ui/ErrorMessage';
-import { formatNumber } from '../../utils/formatters';
+import { useGitHubSection } from '../../../hooks/useDashboardData';
+import { Card } from '../../../components/Card';
+import { StatsGrid } from '../../../components/StatsGrid';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { ErrorMessage, NoDataFound } from '../../../components/ErrorMessage';
+import { formatNumber } from '../../../utils/formatters';
 import { 
   FaGithub, 
   FaStar, 

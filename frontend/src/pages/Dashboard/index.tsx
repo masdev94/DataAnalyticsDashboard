@@ -1,9 +1,10 @@
-import { CryptocurrencySection } from '../dashboard/CryptocurrencySection';
-import { GitHubSection } from '../dashboard/GitHubSection';
-import { WeatherSection } from '../dashboard/WeatherSection';
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import { ConnectionStatus } from '../ui/ConnectionStatus';
+
 import { FaChartLine } from 'react-icons/fa';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
+import { CryptocurrencySection } from './components/CryptocurrencySection';
+import { GitHubSection } from './components/GitHubSection';
+import { WeatherSection } from './components/WeatherSection';
+import { ConnectionStatus } from '../../components/ConnectionStatus';
 
 export function Dashboard() {
   return (

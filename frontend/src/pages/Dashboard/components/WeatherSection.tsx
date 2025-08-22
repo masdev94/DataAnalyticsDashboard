@@ -1,9 +1,9 @@
-import { useWeatherSection } from '../../hooks/useDashboardData';
-import { Card } from '../ui/Card';
-import { StatsGrid } from '../ui/StatsGrid';
-import { LoadingSpinner } from '../ui/LoadingSpinner';
-import { ErrorMessage, NoDataFound } from '../ui/ErrorMessage';
-import { AutocompleteSearch } from '../ui/AutocompleteSearch';
+import { useWeatherSection } from '../../../hooks/useDashboardData';
+import { Card } from '../../../components/Card';
+import { StatsGrid } from '../../../components/StatsGrid';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { ErrorMessage, NoDataFound } from '../../../components/ErrorMessage';
+import { AutocompleteSearch } from '../../../components/AutocompleteSearch';
 import { 
   FaCloudSun, 
   FaThermometerHalf, 
@@ -22,7 +22,6 @@ export function WeatherSection() {
   const { data, loading, error, hasData, userLocation, search } = useWeatherSection();
   const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
 
-  // Handle loading state with spinner
   if (loading) {
     return (
       <Card title="Weather Information" icon={<FaCloudSun />}>
@@ -34,7 +33,6 @@ export function WeatherSection() {
     );
   }
 
-  // Handle error state gracefully
   if (error) {
     return (
       <Card title="Weather Information" icon={<FaCloudSun />}>
@@ -47,7 +45,6 @@ export function WeatherSection() {
     );
   }
 
-  // Handle no data state
   if (!hasData || !data) {
     return (
       <Card title="Weather Information" icon={<FaCloudSun />}>
@@ -59,7 +56,6 @@ export function WeatherSection() {
     );
   }
 
-  // Unit conversion helpers
   const getTemperatureDisplay = (temp: number) => {
     if (units === 'imperial') {
       const fahrenheit = (temp * 9/5) + 32;

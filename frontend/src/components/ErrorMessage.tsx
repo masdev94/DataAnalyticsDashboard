@@ -13,7 +13,6 @@ export function ErrorMessage({
   error, 
   onRetry, 
   variant = 'error',
-  showDetails = false,
   className = '' 
 }: ErrorMessageProps) {
   const variantStyles = {
@@ -95,7 +94,6 @@ export function ErrorMessage({
   );
 }
 
-// Empty state component for when no data is found
 export function EmptyState({ 
   title, 
   message, 

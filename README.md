@@ -34,7 +34,7 @@ The dashboard processes this raw data through intelligent algorithms to provide:
 - **Global Perspective**: Compare weather patterns across different regions
 - **Planning Tool**: Make informed decisions based on current conditions and forecasts
 
-## 👥 Who Might Find This Useful?
+##  Who Might Find This Useful?
 
 ### **Primary Users:**
 - **Financial Analysts & Crypto Traders**: Need real-time market data and trend analysis
@@ -48,7 +48,7 @@ The dashboard processes this raw data through intelligent algorithms to provide:
 - **Business Owners**: Understanding market dynamics and technology trends
 - **General Public**: Interested in cryptocurrency, technology, or weather information
 
-## ✨ UX/DX Touches That Make the App Delightful
+##  UX/DX Touches That Make the App Delightful
 
 ### **User Experience Enhancements:**
 - ** Professional Dark Theme**: Easy on the eyes with professional color scheme
@@ -67,7 +67,7 @@ The dashboard processes this raw data through intelligent algorithms to provide:
 - ** Component Library**: Consistent UI components with proper styling
 - ** Fast Development**: Hot reload and optimized build process
 
-## 🏗️ Architecture Overview
+##  Architecture Overview
 
 ### **Frontend (React + TypeScript + Vite)**
 ```
@@ -94,10 +94,10 @@ backend/
 └── server.js                  # Main server entry point
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### **Prerequisites**
-- Node.js 19 
+- Node.js 20+ 
 - npm or yarn
 - Modern web browser
 
