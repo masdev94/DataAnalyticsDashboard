@@ -73,15 +73,28 @@ The dashboard processes this raw data through intelligent algorithms to provide:
 ```
 frontend/
 ├── src/
-│   ├── components/
-│   │   ├── dashboard/          # Dashboard sections
-│   │   ├── pages/             # Page-level components
-│   │   └── ui/                # Reusable UI components
-│   ├── hooks/                 # Custom React hooks
-│   ├── context/               # React context for state management
-│   ├── services/              # API service layer
-│   ├── utils/                 # Utility functions
-│   └── types/                 # TypeScript type definitions
+│   ├── components/             # Reusable UI components
+│   │   ├── AutocompleteSearch.tsx
+│   │   ├── Card.tsx
+│   │   ├── ConnectionStatus.tsx
+│   │   ├── ErrorBoundary.tsx
+│   │   ├── ErrorMessage.tsx
+│   │   ├── LoadingSpinner.tsx
+│   │   └── StatsGrid.tsx
+│   ├── pages/                  # Page-level components
+│   │   └── Dashboard/
+│   │       ├── index.tsx
+│   │       └── components/
+│   │           ├── CryptocurrencySection.tsx
+│   │           ├── GitHubSection.tsx
+│   │           └── WeatherSection.tsx
+│   ├── hooks/                  # Custom React hooks
+│   ├── context/                # React context for state management
+│   ├── services/               # API service layer
+│   ├── utils/                  # Utility functions
+│   ├── types/                  # TypeScript type definitions
+│   ├── data/                   # Data schemas and constants
+│   └── assets/                 # Static assets and images
 ```
 
 ### **Backend (Node.js + Express)**
